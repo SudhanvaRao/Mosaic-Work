@@ -21,16 +21,26 @@ for char in index_symbols:
         traindata.append([image_array,symb_index])
 random.shuffle(traindata)
 
-traindata=[]
-for char in index_symbols:
-    path=os.path.join(PATH,char)
-    for img in os.listdir(path):
-        symb_index=index_symbols.index(char)
-        img_array=cv2.imread(os.path.join(path,img),cv2.IMREAD_GRAYSCALE)
-        print(os.path.join(path,img))
-        image_array=cv2.resize(img_array,(100,100))
-        traindata.append([image_array,symb_index])
-random.shuffle(traindata)
+Xfull=[]
+yfull=[]
+
+for features,labels in traindata:
+    features=np.reshape(features,(100,100,1))
+    print(np.shape(labels))
+    Xfull.append(features)
+
+X=np.array(Xfull,dtype='float64')
+del Xfull
+gc.collect()
+for features,labels in traindata:
+    yfull.append(labels)
+
+y=np.array(yfull,dtype='float64')
+del yfull 
+gc.collect()
+
+print(X.shape)
+print(y.shape)
 
 def model():
     inputs = keras.Input(shape=(100,100,1))
